@@ -14,6 +14,21 @@ This header file defines the camera class
 using namespace std;
 
 class Camera {
+public:
+	/* public functions */
+	Camera(GLdouble, GLdouble, GLdouble); //constuctor sets the member variables to defaults for gluLookAt
+	void update(void); //updates variables as though a time step passed
+	void draw(void); //'draws' the camera using it's current state
+	void setRotateSpeed(GLint, GLfloat); //changes the rotation direction of the camera
+	void adjustFlightSpeed(GLfloat); //adjust flight speed within min and max
+	void adjustHeight(GLfloat); //adjust the height of the camera
+
+private:
+	/* private functions */
+	void updateRotate(void); //updates camera rotation amount based on current rotate speed and direction
+	void updateDistance(void); //updates the camera position based on the current flight speed
+
+	/* private variables */
 	GLdouble currentX, currentY, currentZ; //members for tracking current camera position
 	GLdouble lookX, lookY, lookZ; //members to set where the camera is looking
 	GLdouble translateX, translateY, translateZ; //
@@ -25,18 +40,7 @@ class Camera {
 	GLfloat maxRotateSpeed; //upper limit to the camera rotational speed
 	GLfloat minRotateSpeed; //loswer limit to the camera rotational speed
 
-
 	GLfloat flightSpeed; //tracks the current speed of the camera
 	GLfloat maxFlightSpeed; //upper limit to the camera flight speed
 	GLfloat minFlightSpeed; //lower limit to the camera flight speed
-
-public:
-	Camera(GLdouble, GLdouble, GLdouble); //constuctor sets the member variables to defaults for gluLookAt
-	void update(); //updates variables as though a time step passed
-	void draw(void); //'draws' the camera using it's current state
-	void setRotateSpeed(GLint, GLfloat); //changes the rotation direction of the camera
-	void adjustFlightSpeed(GLfloat); //adjust flight speed within min and max
-	void adjustHeight(GLfloat); //adjust the height of the camera
-	void updateRotate(void); //updates camera rotation amount based on current rotate speed and direction
-	void updateDistance(); //updates the camera position based on the current flight speed
 };

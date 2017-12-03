@@ -3,7 +3,7 @@ File: main.cpp
 Author: Jonathan Ignacio
 Date: December 3, 2017
 
-This is the main source file for the flight simulator project for CSCI 3161.
+This is the main source file for the flight simulator project for CSCI 3161. Handles windowing, rendering and other GLUT processes
 */
 
 /*---------------------- Big Ol' To-do list ----------------------*/
@@ -22,7 +22,7 @@ Clear all TODO list items
 #include <iostream>
 #include <freeglut.h>
 
-#include "Generation.h"
+#include "scene.h"
 #include "constants.h"
 #include "camera.h"
 
@@ -30,28 +30,18 @@ using namespace std;
 
 /* global variables for tracking states */
 GLboolean fullscreen = false; //variable for tracking if the program is in fullscreen
-GLboolean wireframe = true; //toggles GL_LINES or GL_FILL for the grid
 GLint windowWidth = WINDOW_INIT_WIDTH, windowHeight = WINDOW_INIT_HEIGHT; //tracks the window height and width
 
 /* camera control variables*/
 Camera* camera; //the camera object
+Scene* scene; //the scene object
 
 /* display function for rendering all objects */
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear frame and z buffer
 
 	camera->draw(); //sets the camera, all objects following are drawn in reference to it
-
-	drawAxis(); //draw the reference axis and the sphere
-
-				/* draw the grid, filled or wireframe based on toggle*/
-	if (wireframe) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //change polygon mode to wireframe
-	}
-	else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //change to solid
-	}
-	drawGrid(); //draw the grid
+	scene->draw(); //renders the scene based on its current states
 
 	glutSwapBuffers(); //swap buffers
 }
@@ -85,7 +75,7 @@ void keys(unsigned char key, int x, int y) {
 
 	switch (key) {
 	case 'w':
-		wireframe = !wireframe; //toggle wireframe on or off
+		scene->toggleWireframe(); //toggle scene wireframe on or off
 		break;
 
 	case 'f':
@@ -149,19 +139,17 @@ void mouseMotion(int x, int y) {
 void initializeGL()
 {
 	glEnable(GL_DEPTH_TEST); //enables hidden surface removal
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //set initial polygon modes
-
-											   /* set states as default*/
 	glClearColor(BLACK, 1.0); //set background to black
-	glLineWidth(DEFAULT_LINE_WIDTH);
+	glLineWidth(DEFAULT_LINE_WIDTH); //defaults stored in constants.h file
 
+	/* set up projection mode */
 	glMatrixMode(GL_PROJECTION); // go into projection mode to change the camera properties
 	glLoadIdentity(); // load identity into projection matrix
-					  //arguments gluPerspective(fovy, aspect, near, far)
 	gluPerspective(DEFAULT_FOV, windowWidth / windowHeight, Z_NEAR, Z_FAR); //set perspective projection
 
+	/* object instantiations go here */
 	camera = new Camera(CAMERA_INIT_EYE_X, CAMERA_INIT_EYE_Y, CAMERA_INIT_EYE_Z); //initialize the camera object providing its initial position
+	scene = new Scene(); //no arg constructor to object used for scene rendering
 
 	glMatrixMode(GL_MODELVIEW); // go into model-view mode to change the object’s position
 }
@@ -170,7 +158,7 @@ void initializeGL()
 void main(int argc, char **argv) {
 	glutInit(&argc, argv);	// Intialize GLUT command line arguments
 
-							/* window intitialzation */
+	/* window intitialzation */
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); //double buffering, z-depth, RGB color
 	glutInitWindowSize(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT); //starting window size
 	glutInitWindowPosition(WINDOW_INIT_X, WINDOW_INIT_Y); //set the initial window position
