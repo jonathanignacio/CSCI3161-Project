@@ -9,6 +9,7 @@ This header file defines the camera class
 #pragma once //prevents defining more than once
 #include <freeglut.h>
 #include "constants.h"
+#include <math.h>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ public:
 	Camera(GLdouble, GLdouble, GLdouble); //constuctor sets the member variables to defaults for gluLookAt
 	void update(); //updates variables as though a time step passed
 	void draw(void); //'draws' the camera using it's current state
-	void adjustRotateSpeed(GLint, GLfloat); //changes the rotation direction of the camera
+	void setRotateSpeed(GLint, GLfloat); //changes the rotation direction of the camera
 	void adjustFlightSpeed(GLfloat); //adjust flight speed within min and max
 	void adjustHeight(GLfloat); //adjust the height of the camera
 	void updateRotate(void); //updates camera rotation amount based on current rotate speed and direction

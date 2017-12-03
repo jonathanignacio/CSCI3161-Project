@@ -33,11 +33,10 @@ GLboolean fullscreen = false; //variable for tracking if the program is in fulls
 GLboolean wireframe = true; //toggles GL_LINES or GL_FILL for the grid
 GLint windowWidth = WINDOW_INIT_WIDTH, windowHeight = WINDOW_INIT_HEIGHT; //tracks the window height and width
 
-																		  /* camera control variables*/
+/* camera control variables*/
 Camera* camera; //the camera object
-GLint lastX = 0; //stores the most recent X position for reference;
 
-				 /* display function for rendering all objects */
+/* display function for rendering all objects */
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear frame and z buffer
 
@@ -131,34 +130,19 @@ void mouseMotion(int x, int y) {
 	GLint midPoint = windowWidth / 2; //get the midpoint of the screen
 	GLint centerLeft = midPoint - (windowWidth * WINDOW_CENTER_WIDTH); //left x coord of the center area
 	GLint centerRight = midPoint + (windowWidth * WINDOW_CENTER_WIDTH); //right x coord of the center area
+	GLfloat portion; //percentage distance of cursor from center to edge
 
 	if (x < centerLeft) { //cursor is left of screen
-		if (x < lastX) { //cursor moved more left than last time
-			camera->adjustRotateSpeed(-1, CAMERA_ROTATE_SPEED_ADJUST); //since even more left, increase left speed
-		}
-		else if (x > lastX) { //cursor moved more right than last time
-			camera->adjustRotateSpeed(-1, -CAMERA_ROTATE_SPEED_ADJUST); //since less left, decrease left speed
-		}
-		else { //x did not change
-			camera->adjustRotateSpeed(-1, 0); //no speed change
-		}
+		portion = 1 - (GLfloat) x / (GLfloat) centerLeft; //get the percentage for left side
+		camera->setRotateSpeed(-1, portion * CAMERA_ROTATE_SPEED_MAX); //adjust speed based on percentage
 	}
 	else if (x > centerRight) {
-		if (x > lastX) { //cursor moved more right than last time
-			camera->adjustRotateSpeed(1, CAMERA_ROTATE_SPEED_ADJUST); //since more right, increase right speed
-		}
-		else if (x < lastX) { //cursor moved more left than last time
-			camera->adjustRotateSpeed(1, -CAMERA_ROTATE_SPEED_ADJUST); //since less right, decrease left speed
-		}
-		else { //x did not change
-			camera->adjustRotateSpeed(1, 0); //no speed change
-		}
+		portion = ((GLfloat) x - (GLfloat) centerRight) / ((GLfloat) windowWidth - (GLfloat) centerRight); //get the percentage for right side
+		camera->setRotateSpeed(1, portion * CAMERA_ROTATE_SPEED_MAX); //adjust speed based on percentage
 	}
 	else { //cursor is within center
-		camera->adjustRotateSpeed(0, -CAMERA_ROTATE_SPEED_MAX); //if the mouse passes through center, rotation speed is set to 0
+		camera->setRotateSpeed(0, 0); //if the mouse passes through center, rotation speed is set to 0
 	}
-
-	lastX = x; //update the most recent x value
 }
 
 /* initialization function, adpated from lecture notes*/
@@ -192,13 +176,19 @@ void main(int argc, char **argv) {
 	glutInitWindowPosition(WINDOW_INIT_X, WINDOW_INIT_Y); //set the initial window position
 	glutCreateWindow("2k17 Flight Simulator: Electric Boogaloo"); //create the named window
 
-																  /* callback registrations */
+	/* callback registrations */
 	glutReshapeFunc(reshape); //window resizing function 
 	glutDisplayFunc(display); //display function 
 	glutIdleFunc(idle); //idle function 
 	glutKeyboardFunc(keys); //normal keyboard function
 	glutSpecialFunc(specialKeys); //special keyboard function
 	glutPassiveMotionFunc(mouseMotion); //passive mouse motion function
+
+	/* place description for keyboard controls here */
+	cout << "CONTROLS: \n"
+		<< "q: quits the application\n"
+		<< "f: toggles fullscreen\n"
+		<< "w: toggles wireframe grid\n";
 
 	initializeGL(); //run initialization
 	glutMainLoop(); //start looping

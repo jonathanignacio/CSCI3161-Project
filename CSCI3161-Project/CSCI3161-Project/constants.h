@@ -33,7 +33,7 @@ This header file contains globally accessible constants that are referenced thro
 #define CAMERA_ROTATE_SPEED_ADJUST 0.01 //amount that the rotation speed is increased by per step 
 #define CAMERA_ROTATE_SPEED_MAX 3 //rotation maximum speed
 #define CAMERA_ROTATE_SPEED_MIN 0 //rotation minimum speed (generally should be 0 for no rotation as the minimum)
-#define CAMERA_FLIGHT_SPEED_ADJUST 0.1 //camera speed decrement or increment amount per step
+#define CAMERA_FLIGHT_SPEED_ADJUST 0.05 //camera speed decrement or increment amount per step
 #define CAMERA_FLIGHT_SPEED_MAX 10 //camera flight maximum speed
 #define CAMERA_FLIGHT_SPEED_MIN 0 //camera flight minimum speed
 

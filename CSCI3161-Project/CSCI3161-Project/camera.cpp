@@ -57,25 +57,33 @@ void Camera::draw() {
 		lookX, lookY, lookZ,				//camera look at
 		upX, upY, upZ);						//camera up direction
 
-	glRotatef(rotateAmount, 0, 1, 0); //rotate based on current value, about the y axis
+	/* plane goes here */
+	glPushMatrix(); //push matrix so that only the plane is rotated
+		glRotatef(90, 0, 1, 0); //spout facing forward
+		glColor3f(BLUE); 
+		glutSolidTeapot(1); //a nice blue teapot plane
+	glPopMatrix(); //pop back to transform scene
+
+	glRotatef(rotateAmount, 0, 1, 0); //rotate scene based on current value, about the y axis
 	glTranslatef(translateX, translateY, translateZ); //translate scene based on movement of camera
+
 }
 
 /* function that sets camera rotation variables, speedChange is positive for increasing speeds */
-void Camera::adjustRotateSpeed(GLint dir, GLfloat speedChange) {
+void Camera::setRotateSpeed(GLint dir, GLfloat newSpeed) {
 	rotateDirection = dir; //current rotational direction
 
-	if (speedChange > 0) { //speed increase
-		if (rotateSpeed + speedChange < maxRotateSpeed) { //if change does not violate maximum
-			rotateSpeed += speedChange; //go ahead with adjustment
+	if (newSpeed > 0) { //speed increase
+		if (newSpeed < maxRotateSpeed) { //if change does not violate maximum
+			rotateSpeed = newSpeed; //go ahead with adjustment
 		}
 		else { //is at or near max speed
 			rotateSpeed = maxRotateSpeed; //clamp the rotation speed
 		}
 	}
 	else { //speed decrease
-		if (rotateSpeed + speedChange > minRotateSpeed) { //if change does not violate minimum
-			rotateSpeed += speedChange; //go ahead with adjustment
+		if (newSpeed > minRotateSpeed) { //if change does not violate minimum
+			rotateSpeed = newSpeed; //go ahead with adjustment
 		}
 		else { //is at or near min speed
 			rotateSpeed = minRotateSpeed; //clamp the rotation speed
@@ -123,5 +131,7 @@ void Camera::updateRotate() {
 
 /* updates camera position variables based on current speed and rotation*/
 void Camera::updateDistance() {
-
+	//determine x and z coordinate difference based on current rotation and speed
+	translateX += flightSpeed * sin(rotateAmount);
+	translateZ += flightSpeed * cos(rotateAmount);
 }
