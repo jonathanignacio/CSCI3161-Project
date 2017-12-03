@@ -12,7 +12,7 @@ This is the main source file for the flight simulator project for CSCI 3161.
 Exercise 2
 
 Exercise 3:
-Use mouse motion dubgging info to figure out why the camera does not rotate with the mouse (looks like it's close)
+Allow for camera translation, current challege is movement idepenedent of the scene
 
 END:
 Maybe change window name? ...but it's great

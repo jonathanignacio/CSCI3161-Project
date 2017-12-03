@@ -9,33 +9,33 @@ This source file contains all functions and variables related to the camera
 #include "camera.h"
 
 Camera::Camera(GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ) {
-	/* set the starting eye position from the origin*/
+	/* initialize the starting eye position from the origin*/
 	currentX = eyeX;
 	currentY = eyeY;
 	currentZ = eyeZ;
 
-	/* set the starting look at position (starts at origin) */
+	/* initialize the starting look at position (the plane is drawn here) */
 	lookX = 0;
 	lookY = 0;
 	lookZ = 0;
 
-	/* set the look offsets to lock the camera angle*/
-	lookOffsetX = eyeX - lookX;
-	lookOffsetY = eyeY - lookY;
-	lookOffsetZ = eyeZ - lookZ;
+	/* initialize the look offsets to lock the camera angle*/
+	translateX = 0;
+	translateY = 0;
+	translateZ = 0;
 
-	/* set the up direction */
+	/* initialize the up direction */
 	upX = 0;
 	upY = 1;
 	upZ = 0;
 
 	/* set the intial camera movement variables */
 	rotateAmount = 0; //camera begins facing forward
-	rotateDirection = 0; //camera begins moving forward
-	rotateSpeed = 0; //camera begins by not rotating (-1 for left, +1 for right)
+	rotateDirection = 0; //camera begins facing forward (-1 for left, +1 for right)
+	rotateSpeed = 0; //camera begins by not rotating 
 	flightSpeed = 0; //camera is initialially not moving
-
-					 /* set the movement limits from constants */
+	
+	/* set the movement limits from constants */
 	maxRotateSpeed = CAMERA_ROTATE_SPEED_MAX; //the fastest that the camera is allowed to rotate
 	minRotateSpeed = CAMERA_ROTATE_SPEED_MIN; //the slowest that the camera is allowed to rotate
 	maxFlightSpeed = CAMERA_FLIGHT_SPEED_MAX; //upper limit to the camera speed
@@ -45,7 +45,7 @@ Camera::Camera(GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ) {
 /* function to set the camera using the paramters stored in the camera object */
 void Camera::update() {
 	this->updateRotate(); //calls function to update the rotateAmount within limits
-	this->updateDistance();
+	this->updateDistance(); //calls function to update the flight translation
 }
 
 /* draws the camera using its current state*/
@@ -58,7 +58,7 @@ void Camera::draw() {
 		upX, upY, upZ);						//camera up direction
 
 	glRotatef(rotateAmount, 0, 1, 0); //rotate based on current value, about the y axis
-	glTranslatef(0, 0, 0); //translate scene based on movement of camera
+	glTranslatef(translateX, translateY, translateZ); //translate scene based on movement of camera
 }
 
 /* function that sets camera rotation variables, speedChange is positive for increasing speeds */
@@ -105,7 +105,7 @@ void Camera::adjustFlightSpeed(GLfloat change) {
 
 /* function to adjust the height of the camera */
 void Camera::adjustHeight(GLfloat change) {
-	lookOffsetY += change; //adjust the height of the camera by change the distance between what is rendered
+	translateY += change; //adjust the height of the camera by change the distance between what is rendered
 }
 
 /* updates rotateAmount within the restrictions for the next time the camera is drawn*/

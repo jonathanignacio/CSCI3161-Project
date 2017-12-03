@@ -13,10 +13,10 @@ This header file defines the camera class
 using namespace std;
 
 class Camera {
-	GLdouble currentX, currentY, currentZ; //member for tracking current camera position
-	GLdouble lookX, lookY, lookZ; //member to set where the camera is looking
-	GLdouble lookOffsetX, lookOffsetY, lookOffsetZ; //members to track the difference between subject and camera
-	GLdouble upX, upY, upZ; //member for keeping track of the camera up direction
+	GLdouble currentX, currentY, currentZ; //members for tracking current camera position
+	GLdouble lookX, lookY, lookZ; //members to set where the camera is looking
+	GLdouble translateX, translateY, translateZ; //
+	GLdouble upX, upY, upZ; //members for keeping track of the camera up direction
 
 	GLint rotateDirection; //tracks the current camera rotation direction
 	GLfloat rotateAmount; //tracks the current camera rotation
