@@ -9,7 +9,7 @@ This header file contains prototypes and dependencies for the generation.cpp fil
 #pragma once //prevents defining more than once
 
 #include <freeglut.h>
-#include "constants.h"
+#include "utility.h"
 #include <math.h>
 
 using namespace std;
