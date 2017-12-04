@@ -6,17 +6,6 @@ Date: December 3, 2017
 This is the main source file for the flight simulator project for CSCI 3161. Handles windowing, rendering and other GLUT processes
 */
 
-/*---------------------- Big Ol' To-do list ----------------------*/
-/*
-*************TODO***************
-Exercise 2
-GOAL: have a class that can draw a collection of sub-objects as a single object (a master model)
-
-END:
-Maybe change window name? ...but it's great
-Clear all TODO list items
-*/
-
 #include <freeglut.h>
 
 #include "scene.h"
