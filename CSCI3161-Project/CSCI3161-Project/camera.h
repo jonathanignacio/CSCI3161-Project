@@ -3,11 +3,12 @@ File: camera.h
 Author: Jonathan Ignacio
 Date: December 3, 2017
 
-This header file defines the camera class
+This header file defines the camera class and contains the constants used by it
 */
 
 #pragma once //prevents defining more than once
 #include <freeglut.h>
+#include "model.h"
 #include "utility.h"
 #include <math.h>
 
@@ -25,8 +26,6 @@ This header file defines the camera class
 #define CAMERA_FLIGHT_SPEED_MIN 0.01 //camera flight minimum speed
 #define PLANE_ROLL_RANGE 45 //degree of rotation for plane roll in one direction (total range is *2)
 #define PLANE_INITIAL_HEIGHT 5 //height from the apparent axis
-
-using namespace std;
 
 class Camera {
 public:
@@ -59,4 +58,7 @@ private:
 	GLfloat flightSpeed; //tracks the current speed of the camera
 	GLfloat maxFlightSpeed; //upper limit to the camera flight speed
 	GLfloat minFlightSpeed; //lower limit to the camera flight speed
+
+	Model* plane; //model object for the plane
+	Model* propeller; //model object for the propellors (only need one, can draw twice)
 };

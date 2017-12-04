@@ -10,10 +10,7 @@ This is the main source file for the flight simulator project for CSCI 3161. Han
 /*
 *************TODO***************
 Exercise 2
-
-Exercise 3:
-Allow for camera translation, current challege is movement idepenedent of the scene
-add debugging info to test the values of the translate X,Y,Z values
+GOAL: have a class that can draw a collection of sub-objects as a single object (a master model)
 
 END:
 Maybe change window name? ...but it's great
@@ -25,8 +22,6 @@ Clear all TODO list items
 #include "scene.h"
 #include "utility.h"
 #include "camera.h"
-
-using namespace std;
 
 /* global variables for tracking states */
 GLboolean fullscreen = false; //variable for tracking if the program is in fullscreen

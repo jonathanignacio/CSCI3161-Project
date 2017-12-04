@@ -9,8 +9,6 @@ Is generally called directly in the display function.
 
 #include "scene.h"
 
-using namespace std;
-
 /* constructor for the scene object */
 Scene::Scene() {
 	wireframe = true; //default draw as a wireframe

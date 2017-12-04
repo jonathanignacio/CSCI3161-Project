@@ -37,14 +37,16 @@ Camera::Camera() {
 	minRotateSpeed = CAMERA_ROTATE_SPEED_MIN; //the slowest that the camera is allowed to rotate
 	maxFlightSpeed = CAMERA_FLIGHT_SPEED_MAX; //upper limit to the camera speed
 	minFlightSpeed = CAMERA_FLIGHT_SPEED_MIN; //lower limit to the camera speed
+
+	/* instantiate the models */
+	plane = new Model(PLANE_FILE_NAME);
+	propeller = new Model(PROPELLER_FILE_NAME);
 }
 
 /* function to set the camera using the paramters stored in the camera object */
 void Camera::update() {
 	this->updateRotate(); //calls function to update the rotateAmount within limits
 	this->updateDistance(); //calls function to update the flight translation
-	cout << "Translate X: " << translateX << ", Z: " << translateZ << "\n";
-	cout << "Direction of rotation: " << currentRotate << "\n";
 }
 
 /* draws the camera using its current state*/
@@ -57,11 +59,26 @@ void Camera::draw() {
 		CAMERA_UP);							//camera up direction
 
 	/* plane goes here */
-	glPushMatrix(); //push matrix so that only the plane is rotated
-		glRotatef(90, 0, 1, 0); //spout facing forward (yaw)
-		glRotatef(planeRoll, 1, 0, 0); //roll according to the rotation value
-		glColor3f(BLUE); 
-		glutSolidTeapot(1); //a nice blue teapot plane
+	glPushMatrix(); //push matrix so that only the plane and its parts are modified
+		glRotatef(270, 0, 1, 0); //nose facing forward (yaw)
+		glRotatef(planeRoll, 1, 0, 0); //plane roll according to the rotation value
+		plane->draw(); //draw the plane
+		
+		/*first propeller*/
+		glPushMatrix();
+			//gltranslatef(); //move propeller to center
+			//glrotatef(); //rotate propeller based on current spin
+			//gltranslatef(); //move propeller back to position
+			propeller->draw(); //render first propeller
+		glPopMatrix();
+
+		/*second propeller*/
+		glPushMatrix();
+			//gltranslatef(); //move propeller to center
+			//glrotatef(); //rotate propeller based on current spin
+			//gltranslatef(); //move propeller back to position
+			propeller->draw();
+		glPopMatrix();
 	glPopMatrix(); //pop back to transform scene
 
 	glRotatef(currentRotate, 0, 1, 0); //rotate scene based on current value, about the y axis
@@ -70,10 +87,10 @@ void Camera::draw() {
 
 /* function that sets camera rotation variables and plane tilt */
 void Camera::tiltControl(GLint dir, GLfloat portion) {
-	rotateDirection = dir; //current rotational direction
+	rotateDirection = dir; //current rotational direction, plane tilts opposite to this direction
 	rotateSpeed = portion * CAMERA_ROTATE_SPEED_MAX; //should be positive
 
-	planeRoll = validDegree(portion * dir * PLANE_ROLL_RANGE); //change plane roll based on where the mouse is relative to the edge of the screen
+	planeRoll = validDegree(portion * -dir * PLANE_ROLL_RANGE); //change plane roll based on where the mouse is relative to the edge of the screen
 }
 
 /* function to adjust flight speed within minimum and maximum values */

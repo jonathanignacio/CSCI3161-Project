@@ -12,8 +12,6 @@ This header file contains prototypes and dependencies for the generation.cpp fil
 #include "utility.h"
 #include <math.h>
 
-using namespace std;
-
 /* class for handling the basic scene generation */
 class Scene{
 public:

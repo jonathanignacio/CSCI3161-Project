@@ -8,8 +8,6 @@ This source file contains all common utility functions (added as needed).
 
 #include "utility.h"
 
-using namespace std;
-
 /* checks that an angle falls between 0 and 360 */
 GLfloat validDegree(GLfloat angle) {
 	if (angle >= 360) {
@@ -28,7 +26,7 @@ GLfloat degreesToRadians(GLfloat angle) {
 /* place description for keyboard controls here */
 void printControls() {
 	system("CLS"); //clear the console
-	cout << "CONTROLS: \n"
+	std::cout << "CONTROLS: \n"
 		<< "q: quits the application\n"
 		<< "f: toggles fullscreen\n"
 		<< "w: toggles wireframe grid\n";
